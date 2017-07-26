@@ -8,8 +8,7 @@ RUN sed -i 's/archive.ubuntu.com/cn.archive.ubuntu.com/g' /etc/apt/sources.list
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get install iputils-ping tzdata -y
 # - Set the locale + timezone --------------------------------------------------
 RUN echo "Asia/Shanghai" > /etc/timezone && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=zh_CN.UTF-8
+    dpkg-reconfigure --frontend=noninteractive locales
 ENV TERM xterm
 ENV LANG zh_CN.UTF-8
 ENV LANGUAGE zh_CN.UTF-8
