@@ -5,7 +5,7 @@ CMD ["/sbin/my_init"]
 
 # Upgrade the Ubunut in the image.
 RUN sed -i 's/archive.ubuntu.com/cn.archive.ubuntu.com/g' /etc/apt/sources.list
-RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get install iputils-ping -y
+RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get install iputils-ping tzdata -y
 # - Set the locale + timezone --------------------------------------------------
 RUN echo "Asia/Shanghai" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata && \
