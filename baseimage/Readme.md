@@ -229,27 +229,6 @@ baseimage-docker的初始化脚本 `/sbin/my_init` ,在启动的时候进程运�
  * 修改 `container_environment.sh` 和 `container_environment.json` 是没有效果的.
  * Runit 的服务是不能像这样修改环境变量的. `my_init` 运行的时候,只对 `/etc/container_environment` 中的修改是生效的.
 
-<a name="envvar_security"></a>
-### 解决Docker没有办法解决的 `/etc/hosts` 的问题
-
-当前是没有办法在docker容器中修改 `/etc/hosts`,这个是因为 [Docker bug 2267](https://github.com/dotcloud/docker/issues/2267).Baseimage-docker 包含了解决这个问题的办法,你必须明白是怎么修改的.
-
-修改的办法包含在系统库中的 `libnss_files.so.2` 文件,这个文件使用 `/etc/workaround-docker-2267/hosts` 来代替系统使用 `/etc/hosts` .如果需要修改 `/etc/hosts`,你只要修改 `/etc/workaround-docker-2267/hosts` 就可以了.
-
-增加这个修改到你的 Dockerfile.下面的命令修改了文件 `libnss_files.so.2`.
-
-    RUN /usr/bin/workaround-docker-2267
-
-(其实你不用在 Dockerfile 文件中运行这个命令,你可以在容器中运行一个 shell 就可以了.)
-
-验证一下它是否生效了,在你的容器中打开一个 shell ,修改`/etc/workaround-docker-2267/hosts`,检查一下是否生效了:
-
-    bash# echo 127.0.0.1 zhulux.dev >> /etc/workaround-docker-2267/hosts
-    bash# ping zhulux.dev
-    ...should ping 127.0.0.1...
-
-**注意 apt-get 升级:** 如果 Ubuntu 升级,就有可能将 `libnss_files.so.2` 覆盖掉,那么修改就会失效.你必须重新运行 `/usr/bin/workaround-docker-2267`.为了安全一点,你应该在运行 `apt-get upgrade` 之后,运行一下这个命令.
-
 <a name="faq"></a>
 ## 常见问题
 
