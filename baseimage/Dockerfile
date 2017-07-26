@@ -6,7 +6,6 @@ CMD ["/sbin/my_init"]
 # Upgrade the Ubunut in the image.
 RUN sed -i 's/archive.ubuntu.com/cn.archive.ubuntu.com/g' /etc/apt/sources.list
 RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get install iputils-ping -y
-RUN chmod 755 /etc/container_environment && chmod 644 /etc/container_environment.sh /etc/container_environment.json && /usr/bin/workaround-docker-2267 && rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 # - Set the locale + timezone --------------------------------------------------
 RUN echo "Asia/Shanghai" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata && \
