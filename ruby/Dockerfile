@@ -5,7 +5,7 @@ ENV BUNDLER_VERSION 1.15.3A
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 RUN apt-get update && apt-get install software-properties-common && \
-    apt-add-repository ppa:brightbox/ruby-ng && apt-get update \
+    apt-add-repository ppa:brightbox/ruby-ng && apt-get update && \
     apt-get install -y ruby2.3 ruby2.3-dev && \
     gem install bundler && \
     apt-get remove --auto-remove -y software-properties-common
