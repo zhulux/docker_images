@@ -1,0 +1,7 @@
+# ls
+alias l='ls -CF'
+alias ll='ls -alFh'
+
+# search through source codes
+alias rg='ag'
+
