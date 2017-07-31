@@ -1,21 +1,35 @@
 FROM phusion/baseimage:0.9.22
 
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
+# Set basic command
+CMD /sbin/my_init
 
-# Upgrade the Ubunut in the image.
+# Set APT mirror & install apps
 RUN sed -i 's/archive.ubuntu.com/cn.archive.ubuntu.com/g' /etc/apt/sources.list
-RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold" && apt-get install iputils-ping tzdata -y
-# - Set the locale + timezone --------------------------------------------------
-RUN echo "Asia/Shanghai" > /etc/timezone && \
-    dpkg-reconfigure --frontend=noninteractive locales
-ENV TERM xterm
-ENV LANG zh_CN.UTF-8
-ENV LANGUAGE zh_CN.UTF-8
-ENV LC_ALL zh_CN.UTF-8
+RUN apt update &&                                            \
+    apt upgrade -y -o Dpkg::Options::="--force-confold" &&   \
+    apt install -y                                           \
+        iputils-ping      # ping                             \
+        dnsutils          # dig/nslookup/etc                 \
+        silversearcher-ag #                                  \
+        wget              #                                  \
+        htop              #                                  \
+        tzdata            #
+RUN apt clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# Set the locale and timezone
+RUN echo "Asia/Shanghai"     > /etc/timezone   && \
+    echo "zh_CN.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
 
+# Essential env vars
+ENV TERM=xterm \
+    LANG=zh_CN.UTF-8 \
+    LANGUAGE=zh_CN.UTF-8 \
+    LC_ALL=zh_CN.UTF-8
+
+# Customize bash shell
+ADD bashrc_customized /root/.bashrc_customized
+RUN echo "source /root/.bashrc_customized" >> /root/.bashrc
 
 
