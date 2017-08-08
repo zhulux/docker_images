@@ -10,7 +10,8 @@ RUN apt update &&                                            \
     apt install -y                                           \
         iputils-ping      # ping                             \
         dnsutils          # dig/nslookup/etc                 \
-        silversearcher-ag #                                  \
+        net-tools         # netstat/ifconfig                 \
+        silversearcher-ag # ag                               \
         wget              #                                  \
         htop              #                                  \
         tzdata            #
